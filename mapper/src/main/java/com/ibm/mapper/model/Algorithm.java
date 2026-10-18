@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class Algorithm implements IAlgorithm {
     @Nonnull protected final Map<Class<? extends INode>, INode> children;
@@ -32,6 +33,7 @@ public class Algorithm implements IAlgorithm {
     @Nonnull protected final DetectionLocation detectionLocation;
     @Nonnull protected final String name;
     @Nonnull protected final NodeOrigin origin;
+    @Nullable protected final AlgorithmFamily family;
 
     public Algorithm(
             @Nonnull IAlgorithm algorithm, @Nonnull final Class<? extends IPrimitive> asKind) {
@@ -40,6 +42,7 @@ public class Algorithm implements IAlgorithm {
         this.detectionLocation = algorithm.getDetectionContext();
         this.kind = asKind;
         this.origin = algorithm.getOrigin();
+        this.family = algorithm.getFamily().orElse(null);
     }
 
     public Algorithm(
@@ -59,6 +62,7 @@ public class Algorithm implements IAlgorithm {
         this.detectionLocation = detectionLocation;
         this.kind = asKind;
         this.origin = origin;
+        this.family = null;
     }
 
     private Algorithm(@Nonnull Algorithm algorithm) {
@@ -67,6 +71,7 @@ public class Algorithm implements IAlgorithm {
         this.detectionLocation = algorithm.detectionLocation;
         this.name = algorithm.name;
         this.origin = algorithm.origin;
+        this.family = algorithm.family;
     }
 
     @Override
@@ -86,6 +91,12 @@ public class Algorithm implements IAlgorithm {
     @Nonnull
     public String getName() {
         return name;
+    }
+
+    @Nonnull
+    @Override
+    public Optional<AlgorithmFamily> getFamily() {
+        return Optional.ofNullable(family);
     }
 
     @Nonnull
